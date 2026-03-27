@@ -2,6 +2,14 @@
 data_root: "/content/data/shapenet_vehicle"
 # Optional: zip on Drive to extract into data_root when running train.py --stage_data
 dataset_archive: ""
+# Dataset fetch (notebook / utils/dataset_download.py) — set ONE meaningful source:
+# - dataset_gdrive_id: Google Drive *file* id (share link → id=...)
+# - dataset_download_url: direct HTTPS link to a .zip you are allowed to host
+# - dataset_drive_zip: path to a .zip already on mounted Drive (copied to local cache then extracted)
+dataset_gdrive_id: ""
+dataset_download_url: ""
+dataset_drive_zip: ""
+download_cache_dir: "/content/data/_download_cache"
 # Persist checkpoints to Drive (mounted in Colab notebook).
 checkpoint_dir: "/content/drive/MyDrive/3DGS_Checkpoints"
 

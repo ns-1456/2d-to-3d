@@ -2,6 +2,10 @@
 data_root: "./data/shapenet_vehicle"
 checkpoint_dir: "./artifacts/checkpoints"
 dataset_archive: ""
+dataset_gdrive_id: ""
+dataset_download_url: ""
+dataset_drive_zip: ""
+download_cache_dir: "./data/_download_cache"
 batch_size: 2
 num_workers: 0
 image_size: 256
