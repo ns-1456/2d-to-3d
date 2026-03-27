@@ -1,10 +1,9 @@
-# After setup.sh installs Colab-compatible torch, install the rest.
-# mamba-ssm pulls causal-conv1d; builds require ninja and a matching CUDA toolkit.
+# Colab default stack — no CUDA-extension builds required.
+# Training uses the ViM encoder’s built-in fallback mixer when mamba-ssm is absent.
 ninja>=1.11
 packaging>=23.0
 pyyaml>=6.0
 pillow>=10.0
 numpy>=1.24
-triton>=2.1.0
-mamba-ssm>=1.0.0
-causal-conv1d>=1.0.0
+# Triton is optional for Phase 1 (rasterizer shell). Colab often has a compatible build preinstalled.
+# If you add Triton kernels later, install a wheel matching torch+CUDA: pip install triton

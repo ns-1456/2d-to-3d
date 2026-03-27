@@ -1,0 +1,7 @@
+# Optional: real Mamba SSM blocks (requires CUDA toolkit matching Colab’s PyTorch).
+# Often fails with "Failed building wheel" on Colab → only install if you need true Mamba.
+# Try in this order after `python -c "import torch; print(torch.__version__, torch.version.cuda)"`:
+#   pip install --no-cache-dir --no-build-isolation causal-conv1d>=1.1.0
+#   pip install --no-cache-dir --no-build-isolation mamba-ssm>=1.2
+causal-conv1d>=1.1.0
+mamba-ssm>=1.2.0
