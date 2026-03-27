@@ -38,3 +38,13 @@ seed: 42
 
 # Use synthetic data when manifest/real files are absent (local smoke tests).
 synthetic: true
+
+# --- Objaverse (open-license vehicle GLBs). The notebook runs scripts/download_objaverse_vehicles.py when true.
+# Training still needs rendered PNGs + manifest.jsonl unless you use synthetic: true.
+objaverse_download: true
+objaverse_out_dir: "/content/data/objaverse_vehicles"
+objaverse_cache: "/content/data/.objaverse_cache"
+objaverse_max_objects: 100
+objaverse_mode: both
+objaverse_scan_uids: 100000
+objaverse_processes: 4

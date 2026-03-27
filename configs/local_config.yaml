@@ -22,3 +22,11 @@ ssim_lambda: 0.2
 amp_dtype: bfloat16
 seed: 42
 synthetic: true
+
+objaverse_download: false
+objaverse_out_dir: "./data/objaverse_vehicles"
+objaverse_cache: "./data/.objaverse_cache"
+objaverse_max_objects: 5
+objaverse_mode: lvis
+objaverse_scan_uids: 5000
+objaverse_processes: 1
