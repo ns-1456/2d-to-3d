@@ -1,0 +1,10 @@
+# After setup.sh installs Colab-compatible torch, install the rest.
+# mamba-ssm pulls causal-conv1d; builds require ninja and a matching CUDA toolkit.
+ninja>=1.11
+packaging>=23.0
+pyyaml>=6.0
+pillow>=10.0
+numpy>=1.24
+triton>=2.1.0
+mamba-ssm>=1.0.0
+causal-conv1d>=1.0.0

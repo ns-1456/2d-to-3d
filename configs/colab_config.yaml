@@ -1,0 +1,32 @@
+# Colab-oriented paths — override with env or CLI as needed.
+data_root: "/content/data/shapenet_vehicle"
+# Optional: zip on Drive to extract into data_root when running train.py --stage_data
+dataset_archive: ""
+# Persist checkpoints to Drive (mounted in Colab notebook).
+checkpoint_dir: "/content/drive/MyDrive/3DGS_Checkpoints"
+
+batch_size: 2
+num_workers: 2
+image_size: 256
+patch_size: 32
+num_gaussians: 10000
+encoder_dim: 256
+encoder_depth: 6
+
+epochs: 1
+lr: 3.0e-4
+weight_decay: 0.01
+checkpoint_every_n_steps: 100
+log_every_n_steps: 10
+
+# Photometric loss: (1 - lambda) * L1 + lambda * (1 - SSIM)
+ssim_lambda: 0.2
+
+# torch.autocast dtype: bfloat16 (recommended on Ampere+) or float16 (uses GradScaler)
+amp_dtype: bfloat16
+
+# Phase 1: rasterizer is a shell; training still runs with a differentiable placeholder render.
+seed: 42
+
+# Use synthetic data when manifest/real files are absent (local smoke tests).
+synthetic: true

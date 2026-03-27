@@ -1,0 +1,20 @@
+# Local / CI smoke test — avoids writing to /content/drive.
+data_root: "./data/shapenet_vehicle"
+checkpoint_dir: "./artifacts/checkpoints"
+dataset_archive: ""
+batch_size: 2
+num_workers: 0
+image_size: 256
+patch_size: 32
+num_gaussians: 512
+encoder_dim: 256
+encoder_depth: 2
+epochs: 1
+lr: 3.0e-4
+weight_decay: 0.01
+checkpoint_every_n_steps: 50
+log_every_n_steps: 5
+ssim_lambda: 0.2
+amp_dtype: bfloat16
+seed: 42
+synthetic: true
