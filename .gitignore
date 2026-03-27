@@ -1,4 +1,7 @@
 .venv/
+.tmp_home/
+.tmp_ov/
+.tmp_ov_dl/
 artifacts/
 __pycache__/
 *.py[cod]
