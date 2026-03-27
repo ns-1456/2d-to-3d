@@ -1,5 +1,7 @@
-# Colab-oriented paths — override with env or CLI as needed.
-data_root: "/content/data/shapenet_vehicle"
+# Real images only: data_root must contain manifest.jsonl (see data/dataset.py).
+# Bundled demo (2 samples): clone includes data/demo — good for smoke tests.
+# For your full dataset, point to e.g. /content/data/shapenet_vehicle after unzip + manifest.
+data_root: "/content/2d-to-3d/data/demo"
 # Optional: zip on Drive to extract into data_root when running train.py --stage_data
 dataset_archive: ""
 # Dataset fetch (notebook / utils/dataset_download.py) — set ONE meaningful source:
@@ -36,11 +38,8 @@ amp_dtype: bfloat16
 # Phase 1: rasterizer is a shell; training still runs with a differentiable placeholder render.
 seed: 42
 
-# Use synthetic data when manifest/real files are absent (local smoke tests).
-synthetic: true
-
 # --- Objaverse (open-license vehicle GLBs). The notebook runs scripts/download_objaverse_vehicles.py when true.
-# Training still needs rendered PNGs + manifest.jsonl unless you use synthetic: true.
+# You must still render GLBs to PNGs + write manifest.jsonl under data_root before training.
 objaverse_download: true
 objaverse_out_dir: "/content/data/objaverse_vehicles"
 objaverse_cache: "/content/data/.objaverse_cache"

@@ -148,13 +148,11 @@ def main() -> None:
         colab_setup.unzip_to_local(arch, cfg["data_root"], overwrite=False)
         print(f"Staged dataset to {cfg['data_root']}")
 
-    synthetic = bool(cfg.get("synthetic", False))
     loader = make_dataloader(
         data_root=cfg["data_root"],
         batch_size=int(cfg["batch_size"]),
         image_size=int(cfg["image_size"]),
         num_workers=int(cfg["num_workers"]),
-        synthetic=synthetic,
         shuffle=True,
     )
 

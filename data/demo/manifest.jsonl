@@ -1,0 +1,2 @@
+{"model_id": "demo0", "input": "images/s0_in.png", "target": "images/s0_tgt.png"}
+{"model_id": "demo1", "input": "images/s1_in.png", "target": "images/s1_tgt.png"}
