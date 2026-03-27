@@ -1,0 +1,3 @@
+# Optional: download Objaverse vehicle GLBs (see scripts/download_objaverse_vehicles.py)
+objaverse>=0.1.7
+tqdm>=4.65.0
