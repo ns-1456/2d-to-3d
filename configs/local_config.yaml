@@ -1,27 +1,31 @@
-# Local / CI smoke test — avoids writing to /content/drive.
-# Run: python scripts/bootstrap_demo_images.py  (creates manifest + PNGs)
-data_root: "./data/demo"
+# Local smoke — small sketch dataset
+data_root: "./data/sketch3d_train"
 checkpoint_dir: "./artifacts/checkpoints"
 dataset_archive: ""
 dataset_gdrive_id: ""
 dataset_download_url: ""
 dataset_drive_zip: ""
 download_cache_dir: "./data/_download_cache"
-batch_size: 2
+
+gen_sketch_if_missing: true
+sketch_num_samples: 32
+
+batch_size: 4
 num_workers: 0
-image_size: 256
-patch_size: 32
+image_size: 128
+patch_size: 16
 num_gaussians: 512
 encoder_dim: 256
 encoder_depth: 2
 epochs: 1
 lr: 3.0e-4
 weight_decay: 0.01
-checkpoint_every_n_steps: 50
-log_every_n_steps: 5
+checkpoint_every_n_steps: 10
+log_every_n_steps: 2
 ssim_lambda: 0.2
 amp_dtype: bfloat16
 seed: 42
+
 objaverse_download: false
 objaverse_out_dir: "./data/objaverse_vehicles"
 objaverse_cache: "./data/.objaverse_cache"

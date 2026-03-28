@@ -1,9 +1,11 @@
 """
 Full splat model: ViM encoder -> MLP decoder -> constrained Gaussian parameters.
 
+Typical conditioning x is a **3×H×W sketch** (line drawing); training uses paired RGB targets.
+
 Tensor shape contract (batch B, num_gaussians N, encoder dim D):
 
-1) Input image x:
+1) Input image x (sketch or RGB):
    x.shape == [B, 3, H, W]
 
 2) Encoder forward:

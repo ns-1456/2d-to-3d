@@ -3,6 +3,7 @@
 .tmp_ov/
 .tmp_ov_dl/
 artifacts/
+data/sketch3d_train/
 __pycache__/
 *.py[cod]
 *.pt

@@ -1,15 +1,14 @@
 """
-ShapeNet-style vehicle dataloader: **real images only** from manifest.jsonl.
+Paired image dataset from **manifest.jsonl** (sketch → 3D training scaffold).
 
 Layout:
   data_root/
-    manifest.jsonl   # one JSON object per line
-    ...              # image paths relative to data_root
+    manifest.jsonl   # each line: {"model_id":"...", "input":"rel/sketch.png", "target":"rel/rgb.png", "pose":"optional.npy"}
 
-Each line must include keys "input" and "target" (relative paths to RGB images).
-Optional "pose": relative path to a 4x4 float32 .npy (world/camera); if missing, identity is used.
+`input`  = conditioning (e.g. line drawing / synthetic sketch).  
+`target` = supervision (e.g. shaded RGB render of the same underlying shape).
 
-Loads only from `data_root` (use fast local disk on Colab, e.g. /content/data/...).
+Paths are relative to data_root. Use fast local disk on Colab (e.g. under /content/...).
 """
 
 from __future__ import annotations
@@ -34,7 +33,7 @@ def _load_image(path: Path, image_size: int) -> torch.Tensor:
     return torch.from_numpy(arr).permute(2, 0, 1).float()
 
 
-class ShapeNetVehicleDataset(Dataset):
+class PairedImageDataset(Dataset):
     def __init__(
         self,
         data_root: str,
@@ -47,9 +46,10 @@ class ShapeNetVehicleDataset(Dataset):
         manifest = self.data_root / "manifest.jsonl"
         if not manifest.is_file():
             raise FileNotFoundError(
-                f"Real-data training requires {manifest.resolve()}. "
-                'Each line: {{"model_id":"...","input":"rel/input.png","target":"rel/target.png","pose":"optional.npy"}} '
-                "Paths are relative to data_root. For a tiny local demo run: python scripts/bootstrap_demo_images.py"
+                f"Training requires {manifest.resolve()}. "
+                'Each line: {"model_id":"...","input":"sketch/xxx.png","target":"rgb/xxx.png","pose":"optional.npy"} '
+                "Colab: enable gen_sketch_if_missing in configs/colab_config.yaml or run "
+                "python scripts/gen_sketch3d_synthetic.py --out_dir <data_root> ..."
             )
         self._entries = self._load_manifest(manifest)
         if not self._entries:
@@ -88,6 +88,10 @@ class ShapeNetVehicleDataset(Dataset):
         return inp, tgt, pose
 
 
+# Backwards compatibility
+ShapeNetVehicleDataset = PairedImageDataset
+
+
 def make_dataloader(
     data_root: str,
     batch_size: int,
@@ -95,7 +99,7 @@ def make_dataloader(
     num_workers: int = 2,
     shuffle: bool = True,
 ) -> DataLoader:
-    ds = ShapeNetVehicleDataset(
+    ds = PairedImageDataset(
         data_root=data_root,
         image_size=image_size,
     )

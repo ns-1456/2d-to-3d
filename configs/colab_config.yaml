@@ -1,49 +1,41 @@
-# Real images only: data_root must contain manifest.jsonl (see data/dataset.py).
-# Bundled demo (2 samples): clone includes data/demo — good for smoke tests.
-# For your full dataset, point to e.g. /content/data/shapenet_vehicle after unzip + manifest.
-data_root: "/content/2d-to-3d/data/demo"
-# Optional: zip on Drive to extract into data_root when running train.py --stage_data
+# Colab — sketch → 3D (Gaussian scaffold): narrow synthetic rigid shapes (box/sphere/cylinder).
+# data_root holds sketch/ + rgb/ + manifest.jsonl from scripts/gen_sketch3d_synthetic.py
+
+data_root: "/content/2d-to-3d/data/sketch3d_train"
 dataset_archive: ""
-# Dataset fetch (notebook / utils/dataset_download.py) — set ONE meaningful source:
-# - dataset_gdrive_id: Google Drive *file* id (share link → id=...)
-# - dataset_download_url: direct HTTPS link to a .zip you are allowed to host
-# - dataset_drive_zip: path to a .zip already on mounted Drive (copied to local cache then extracted)
 dataset_gdrive_id: ""
 dataset_download_url: ""
 dataset_drive_zip: ""
 download_cache_dir: "/content/data/_download_cache"
-# Persist checkpoints to Drive (mounted in Colab notebook).
 checkpoint_dir: "/content/drive/MyDrive/3DGS_Checkpoints"
 
-batch_size: 2
-num_workers: 2
-image_size: 256
-patch_size: 32
-num_gaussians: 10000
-encoder_dim: 256
-encoder_depth: 6
+# Auto-run generator if manifest missing or too small (first Colab run).
+gen_sketch_if_missing: true
+sketch_num_samples: 800
 
-epochs: 1
+batch_size: 8
+num_workers: 2
+image_size: 128
+patch_size: 16
+num_gaussians: 2048
+encoder_dim: 256
+encoder_depth: 4
+
+epochs: 3
 lr: 3.0e-4
 weight_decay: 0.01
-checkpoint_every_n_steps: 100
-log_every_n_steps: 10
+checkpoint_every_n_steps: 150
+log_every_n_steps: 20
 
-# Photometric loss: (1 - lambda) * L1 + lambda * (1 - SSIM)
 ssim_lambda: 0.2
-
-# torch.autocast dtype: bfloat16 (recommended on Ampere+) or float16 (uses GradScaler)
 amp_dtype: bfloat16
-
-# Phase 1: rasterizer is a shell; training still runs with a differentiable placeholder render.
 seed: 42
 
-# --- Objaverse (open-license vehicle GLBs). The notebook runs scripts/download_objaverse_vehicles.py when true.
-# You must still render GLBs to PNGs + write manifest.jsonl under data_root before training.
-objaverse_download: true
+# Optional Objaverse GLBs (slow); off by default for fast sketch pipeline.
+objaverse_download: false
 objaverse_out_dir: "/content/data/objaverse_vehicles"
 objaverse_cache: "/content/data/.objaverse_cache"
-objaverse_max_objects: 100
-objaverse_mode: both
-objaverse_scan_uids: 100000
-objaverse_processes: 4
+objaverse_max_objects: 50
+objaverse_mode: lvis
+objaverse_scan_uids: 50000
+objaverse_processes: 2

@@ -11,6 +11,8 @@ import argparse
 import json
 import random
 import re
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
@@ -129,6 +131,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Unzip dataset_archive from config into data_root (run once per Colab session)",
     )
+    p.add_argument(
+        "--gen_sketch_data",
+        action="store_true",
+        help="Run scripts/gen_sketch3d_synthetic.py into data_root (uses sketch_num_samples, image_size from config)",
+    )
     return p.parse_args()
 
 
@@ -147,6 +154,53 @@ def main() -> None:
             raise ValueError("--stage_data requires dataset_archive set in config")
         colab_setup.unzip_to_local(arch, cfg["data_root"], overwrite=False)
         print(f"Staged dataset to {cfg['data_root']}")
+
+    if args.gen_sketch_data:
+        repo = Path(__file__).resolve().parent
+        n = int(cfg.get("sketch_num_samples", 800))
+        sz = int(cfg["image_size"])
+        out = Path(cfg["data_root"])
+        if not out.is_absolute():
+            out = (repo / out).resolve()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        cmd = [
+            sys.executable,
+            str(repo / "scripts" / "gen_sketch3d_synthetic.py"),
+            "--out_dir",
+            str(out),
+            "--num_samples",
+            str(n),
+            "--size",
+            str(sz),
+            "--seed",
+            str(int(cfg.get("seed", 0))),
+        ]
+        print("Generating sketch dataset:", " ".join(cmd))
+        subprocess.check_call(cmd, cwd=str(repo))
+
+    if cfg.get("gen_sketch_if_missing", False) and not args.gen_sketch_data:
+        root = Path(cfg["data_root"])
+        if not root.is_absolute():
+            root = (Path(__file__).resolve().parent / root).resolve()
+        man = root / "manifest.jsonl"
+        need = int(cfg.get("sketch_num_samples", 800))
+        n_lines = sum(1 for _ in open(man, encoding="utf-8")) if man.is_file() else 0
+        if n_lines < max(8, need // 2):
+            repo = Path(__file__).resolve().parent
+            cmd = [
+                sys.executable,
+                str(repo / "scripts" / "gen_sketch3d_synthetic.py"),
+                "--out_dir",
+                str(root),
+                "--num_samples",
+                str(need),
+                "--size",
+                str(int(cfg["image_size"])),
+                "--seed",
+                str(int(cfg.get("seed", 0))),
+            ]
+            print("gen_sketch_if_missing: running", " ".join(cmd))
+            subprocess.check_call(cmd, cwd=str(repo))
 
     loader = make_dataloader(
         data_root=cfg["data_root"],
